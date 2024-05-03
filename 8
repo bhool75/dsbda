@@ -1,0 +1,25 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+from seaborn import load_dataset
+
+# Load the Titanic dataset
+titanic = sns.load_dataset('titanic')
+
+# Display the first few rows of the dataset
+print(titanic.head())
+
+# Use Seaborn to visualize patterns in the data
+# For example, let's visualize the survival rate by passenger class
+sns.countplot(x='pclass', hue='survived', data=titanic)
+plt.title('Survival Rate by Passenger Class')
+plt.xlabel('Passenger Class')
+plt.ylabel('Count')
+plt.show()
+
+# Write code to plot a histogram showing the distribution of ticket prices (fare)
+plt.figure(figsize=(8, 6))
+sns.histplot(titanic['fare'], bins=30, kde=True, color='skyblue')
+plt.title('Distribution of Ticket Prices (Fare)')
+plt.xlabel('Fare')
+plt.ylabel('Frequency')
+plt.show()
