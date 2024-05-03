@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset (replace 'data.csv' with your dataset)
+df = pd.read_csv("data.csv")
+
+# 1. Summary statistics for numeric variables (mean, median, minimum)
+summary_stats = df.describe()
+print("Summary Statistics:")
+print(summary_stats[['age', 'salary']])  # Include other numeric variables as needed
+
+# 2. Grouped summary statistics by a categorical variable
+grouped_stats = df.groupby('category_variable').agg({'numeric_variable': ['mean', 'median', 'min']})
+print("\nGrouped Summary Statistics:")
+print(grouped_stats)
+
+# 3. Grouping by JOB_ID and displaying counts
+job_counts = df['JOB_ID'].value_counts()
+print("\nJob ID Counts:")
+print(job_counts)
+
+# 4. Data visualization for any column (e.g., age distribution)
+plt.figure(figsize=(8, 6))
+plt.hist(df['age'], bins=20, color='skyblue', edgecolor='black')
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
