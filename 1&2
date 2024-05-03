@@ -1,0 +1,58 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder, StandardScaler
+
+# Reading and processing the first dataset
+df = pd.read_csv("3_employees.csv")
+print("Missing Values in the first dataset:")
+print(df.isnull().sum())
+
+# Reading and processing the second dataset
+df1 = pd.read_csv("Employee.csv")
+print("Missing Values in the second dataset:")
+print(df1.isnull().sum())
+
+# Reading and processing the third dataset
+df = pd.read_csv("Employee_2.csv")
+print("Missing Values in the third dataset:")
+print(df.isnull().sum())
+
+# Variable descriptions and dimensions of the data frame
+print("\nVariable Descriptions:")
+print(df.describe())
+print("\nDimensions of the Data Frame:")
+print(df.shape)
+
+# Summarizing data types of columns
+print("\nData Types Summary:")
+print(df.dtypes.value_counts())
+
+# Converting the 'Age' column to float data type
+df['Age'] = df['Age'].astype(float)
+
+# Calculating Z-Score for the 'Age' column
+df['Age_z_score'] = (df['Age'] - df['Age'].mean()) / df['Age'].std()
+
+# Plotting box plot before and after Min-Max normalization for the 'Age' column
+plt.figure(figsize=(10, 20))
+column_name = 'Age'
+min_val = df[column_name].min()
+max_val = df[column_name].max()
+df[column_name + '_min_max'] = (df[column_name] - min_val) / (max_val - min_val)
+df[[column_name, column_name + '_min_max']].boxplot()
+plt.title('Box plot of ' + column_name + ' before and after Min-Max normalization')
+plt.ylabel('Values')
+plt.xticks([1, 2], ['Original', 'Min-Max Normalized'])
+plt.show()
+
+# Plotting box plot for 'Age' and 'Age_z_score'
+plt.figure(figsize=(8, 6))
+df[['Age', 'Age_z_score']].boxplot()
+plt.xticks([1, 2], ['Original', 'Z-Score'])
+plt.show()
+
+# Encoding categorical variable 'City' using LabelEncoder
+encoder = LabelEncoder()
+df['City_Encoded'] = encoder.fit_transform(df['City'])
+print("\nEncoded City Column:")
+print(df[['City', 'City_Encoded']])
