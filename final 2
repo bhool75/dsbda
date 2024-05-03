@@ -1,0 +1,42 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load dataset into pandas DataFrame
+df = pd.read_csv("Academic_Performance.csv")
+
+# 1. Dealing with missing values and inconsistencies
+#    - Filling missing values with median for single column ('column_name')
+#    - Filling missing values with 0 for whole dataset
+column_name = 'column_name'
+df[column_name].fillna(df[column_name].median(), inplace=True)
+df.fillna(0, inplace=True)
+
+# 2. Dealing with outliers using IQR
+#    - Scan all numeric variables for outliers
+#    - Remove outliers based on IQR
+numeric_cols = df.select_dtypes(include=np.number).columns
+Q1 = df[numeric_cols].quantile(0.25)
+Q3 = df[numeric_cols].quantile(0.75)
+IQR = Q3 - Q1
+outliers = ((df[numeric_cols] < (Q1 - 1.5 * IQR)) | (df[numeric_cols] > (Q3 + 1.5 * IQR))).any(axis=1)
+df = df[~outliers]
+
+# 3. Display and Remove the outliers
+#    - Display outliers (rows with outliers) before removal
+print("Rows with outliers before removal:")
+print(df[outliers])
+
+# 4. Applying aggregation function (max, avg)
+#    - Here, let's apply the 'max' aggregation function to 'variable_name' to change the scale
+variable_name = 'variable_name'
+max_value = df[variable_name].max()
+df['max_scaled_' + variable_name] = df[variable_name] / max_value
+
+# 5. Draw Scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(df['Variable_1'], df['Variable_2'])
+plt.title('Scatter plot of Variable_1 vs Variable_2')
+plt.xlabel('Variable_1')
+plt.ylabel('Variable_2')
+plt.show()
