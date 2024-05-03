@@ -1,0 +1,53 @@
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Sample document
+sample_document = """
+Natural language processing (NLP) is a field of computer science, artificial intelligence, 
+and computational linguistics concerned with the interactions between computers and human 
+(natural) languages. As such, NLP is related to the area of human–computer interaction. 
+Many challenges in NLP involve natural language understanding, that is, enabling computers 
+to derive meaning from human or natural language input, and others involve natural language 
+generation.
+"""
+
+# Tokenization
+tokens = word_tokenize(sample_document)
+
+# POS Tagging
+pos_tags = pos_tag(tokens)
+
+# Stop words removal
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
+
+# Stemming
+stemmer = PorterStemmer()
+stemmed_tokens = [stemmer.stem(word) for word in filtered_tokens]
+
+# Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
+
+# TF-IDF representation
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_representation = tfidf_vectorizer.fit_transform([sample_document])
+
+# Print the results
+print("Tokenization:")
+print(tokens)
+print("\nPOS Tagging:")
+print(pos_tags)
+print("\nFiltered Tokens after Stop words removal:")
+print(filtered_tokens)
+print("\nStemmed Tokens:")
+print(stemmed_tokens)
+print("\nLemmatized Tokens:")
+print(lemmatized_tokens)
+print("\nTF-IDF Representation:")
+print(tfidf_representation.toarray())
+
